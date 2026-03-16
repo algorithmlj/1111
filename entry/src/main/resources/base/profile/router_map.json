@@ -1,0 +1,14 @@
+{
+  "routerMap": [
+    {
+      "name": "BillType",
+      "pageSourceFile": "src/main/ets/pages/BillType.ets",
+      "buildFunction": "BillTypeBuilder"
+    },
+    {
+      "name": "BillTypeEdit",
+      "pageSourceFile": "src/main/ets/pages/BillTypeEdit.ets",
+      "buildFunction": "BillTypeEditBuilder"
+    }
+  ]
+}

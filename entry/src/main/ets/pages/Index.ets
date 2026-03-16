@@ -1,5 +1,5 @@
 import { BarModel } from '../commons/BarModel'
-import { SystemConfig } from '../commons/SystemConfig'
+import { pathStack, SystemConfig } from '../commons/SystemConfig'
 import { AIManager } from '../views/AIManager'
 import { Assets } from '../views/Assets'
 import { Bill } from '../views/Bill'
@@ -32,7 +32,7 @@ struct Index {
   }
 
   build() {
-    Navigation(){
+    Navigation(pathStack){
       Column({space:10}) {
         Tabs(){
           TabContent(){
