@@ -1,7 +1,5 @@
 {
   "src": [
-    "pages/Index",
-    "pages/BillType",
-    "pages/BillTypeEdit"
+    "pages/Index"
   ]
 }
