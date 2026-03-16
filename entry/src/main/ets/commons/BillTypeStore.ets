@@ -1,40 +1,83 @@
+import { distributedKVStore } from '@kit.ArkData'
 import { BillTypeKind, BillTypeModel } from './BillTypeModel'
+import { getKvStore } from './SystemConfig'
+
+// KV 键名：用统一前缀 + id 存储每条记录，值为 JSON 字符串
+// 格式：billtype_{id} -> JSON.stringify(BillTypeModel)
+const KEY_PREFIX = 'billtype_'
 
 export class BillTypeStore {
-  private static items: BillTypeModel[] = [
-    { id: 'expense-food', name: '餐饮', type: 'expense' },
-    { id: 'expense-traffic', name: '交通', type: 'expense' },
-    { id: 'income-salary', name: '工资', type: 'income' }
-  ]
 
-  static listByType(type: BillTypeKind): BillTypeModel[] {
-    return BillTypeStore.items.filter(item => item.type === type)
+  /**
+   * 查询指定类型的所有账单类型
+   */
+  static async listByType(type: BillTypeKind): Promise<BillTypeModel[]> {
+    const store: distributedKVStore.SingleKVStore = await getKvStore()
+    const results: BillTypeModel[] = []
+    try {
+      const entries: distributedKVStore.Entry[] = await store.getEntries(KEY_PREFIX)
+      for (let i = 0; i < entries.length; i++) {
+        const value: string = entries[i].value.value as string
+        const item: BillTypeModel = JSON.parse(value) as BillTypeModel
+        if (item.type === type) {
+          results.push(item)
+        }
+      }
+    } catch (_e) {
+      // 无数据时 getEntries 可能抛异常，返回空数组即可
+    }
+    return results
   }
 
-  static findById(id: string): BillTypeModel | undefined {
-    return BillTypeStore.items.find(item => item.id === id)
+  /**
+   * 根据 id 查找单条记录
+   */
+  static async findById(id: string): Promise<BillTypeModel | undefined> {
+    const store: distributedKVStore.SingleKVStore = await getKvStore()
+    try {
+      const value: distributedKVStore.Value = await store.get(KEY_PREFIX + id)
+      return JSON.parse(value as string) as BillTypeModel
+    } catch (_e) {
+      return undefined
+    }
   }
 
-  static create(name: string, type: BillTypeKind): void {
+  /**
+   * 新增账单类型
+   */
+  static async create(name: string, type: BillTypeKind): Promise<void> {
+    const store: distributedKVStore.SingleKVStore = await getKvStore()
     const now: string = Date.now().toString(36)
     const random: string = Math.floor(Math.random() * 10000).toString(36)
-    BillTypeStore.items.unshift({
-      id: `${type}-${now}-${random}`,
-      name,
-      type
-    })
+    const id: string = `${type}_${now}_${random}`
+    const item: BillTypeModel = { id, name, type }
+    await store.put(KEY_PREFIX + id, JSON.stringify(item))
   }
 
-  static update(id: string, name: string, type: BillTypeKind): boolean {
-    const index: number = BillTypeStore.items.findIndex(item => item.id === id)
-    if (index < 0) {
+  /**
+   * 修改账单类型
+   */
+  static async update(id: string, name: string, type: BillTypeKind): Promise<boolean> {
+    const store: distributedKVStore.SingleKVStore = await getKvStore()
+    try {
+      await store.get(KEY_PREFIX + id)
+      const item: BillTypeModel = { id, name, type }
+      await store.put(KEY_PREFIX + id, JSON.stringify(item))
+      return true
+    } catch (_e) {
       return false
     }
-    BillTypeStore.items[index] = { id, name, type }
-    return true
   }
 
-  static remove(id: string): void {
-    BillTypeStore.items = BillTypeStore.items.filter(item => item.id !== id)
+  /**
+   * 删除账单类型
+   */
+  static async remove(id: string): Promise<void> {
+    const store: distributedKVStore.SingleKVStore = await getKvStore()
+    try {
+      await store.delete(KEY_PREFIX + id)
+    } catch (_e) {
+      // ignore
+    }
   }
 }

@@ -15,14 +15,14 @@ export struct BillTypeEdit {
   @State private name: string = ''
   @State private errorText: string = ''
 
-  private initFromParams(params: BillTypeEditParams) {
+  private async initFromParams(params: BillTypeEditParams): Promise<void> {
     this.mode = params.mode
     this.type = params.type
     if (typeof params.id === 'string') {
       this.editId = params.id
     }
     if (this.mode === 'edit' && this.editId.length > 0) {
-      const item: BillTypeModel | undefined = BillTypeStore.findById(this.editId)
+      const item: BillTypeModel | undefined = await BillTypeStore.findById(this.editId)
       if (item !== undefined) {
         this.name = item.name
         this.type = item.type
@@ -30,16 +30,16 @@ export struct BillTypeEdit {
     }
   }
 
-  private submit() {
+  private async submit(): Promise<void> {
     const name: string = this.name.trim()
     if (name.length === 0) {
       this.errorText = '请输入账单类型名称'
       return
     }
     if (this.mode === 'create') {
-      BillTypeStore.create(name, this.type)
+      await BillTypeStore.create(name, this.type)
     } else {
-      BillTypeStore.update(this.editId, name, this.type)
+      await BillTypeStore.update(this.editId, name, this.type)
     }
     pathStack.pop()
   }
@@ -176,8 +176,8 @@ export struct BillTypeEdit {
             .fontColor('#ffffff')
             .fontSize(15)
             .fontWeight(FontWeight.Medium)
-            .onClick(() => {
-              this.submit()
+            .onClick(async () => {
+              await this.submit()
             })
         }
         .width('100%')
@@ -188,10 +188,10 @@ export struct BillTypeEdit {
       .backgroundColor('#f5f5f8')
     }
     .title(this.mode === 'create' ? '新增账单类型' : '编辑账单类型')
-    .onReady((context: NavDestinationContext) => {
+    .onReady(async (context: NavDestinationContext) => {
       const params: BillTypeEditParams | undefined = context.pathInfo?.param as BillTypeEditParams | undefined
       if (params !== undefined) {
-        this.initFromParams(params)
+        await this.initFromParams(params)
       }
     })
   }

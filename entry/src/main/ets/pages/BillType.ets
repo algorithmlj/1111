@@ -19,17 +19,17 @@ export struct BillType {
     this.refreshList()
   }
 
-  private refreshList() {
-    this.billTypes = BillTypeStore.listByType(this.currentType)
+  private async refreshList(): Promise<void> {
+    this.billTypes = await BillTypeStore.listByType(this.currentType)
   }
 
-  private confirmDelete() {
+  private async confirmDelete(): Promise<void> {
     if (this.pendingDeleteId.length > 0) {
-      BillTypeStore.remove(this.pendingDeleteId)
+      await BillTypeStore.remove(this.pendingDeleteId)
       this.pendingDeleteId = ''
       this.pendingDeleteName = ''
       this.showDeleteDialog = false
-      this.refreshList()
+      await this.refreshList()
     }
   }
 
@@ -50,9 +50,9 @@ export struct BillType {
                 .height(36)
                 .backgroundColor(this.currentType === 'expense' ? '#d81e06' : Color.Transparent)
                 .borderRadius(18)
-                .onClick(() => {
+                .onClick(async () => {
                   this.currentType = 'expense'
-                  this.refreshList()
+                  await this.refreshList()
                 })
 
               // 收入 Tab
@@ -65,9 +65,9 @@ export struct BillType {
                 .height(36)
                 .backgroundColor(this.currentType === 'income' ? '#36ab60' : Color.Transparent)
                 .borderRadius(18)
-                .onClick(() => {
+                .onClick(async () => {
                   this.currentType = 'income'
-                  this.refreshList()
+                  await this.refreshList()
                 })
             }
             .width(180)
@@ -203,14 +203,10 @@ export struct BillType {
         .height('100%')
         .width('100%')
         .backgroundColor('#f5f5f8')
-        .onAppear(() => {
-          this.refreshList()
-        })
 
         // 删除确认弹窗遮罩
         if (this.showDeleteDialog) {
           Column() {
-            // 半透明遮罩
             Column()
               .width('100%')
               .height('100%')
@@ -252,8 +248,8 @@ export struct BillType {
                 .backgroundColor('#d81e06')
                 .fontColor('#ffffff')
                 .type(ButtonType.Capsule)
-                .onClick(() => {
-                  this.confirmDelete()
+                .onClick(async () => {
+                  await this.confirmDelete()
                 })
             }
             .width('100%')
@@ -272,5 +268,8 @@ export struct BillType {
       }
     }
     .title('账单类型')
+    .onShown(() => {
+      this.refreshList()
+    })
   }
 }
