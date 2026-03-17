@@ -216,8 +216,10 @@ export struct Assets {
     .height('100%')
     .width('100%')
     .backgroundColor('#f5f5f8')
-    .onAppear(() => {
-      this.refreshData()
+    .onVisibleAreaChange([0.0, 1.0], (_isVisible: boolean, currentRatio: number) => {
+      if (currentRatio > 0) {
+        this.refreshData()
+      }
     })
   }
 }

@@ -310,8 +310,10 @@ export struct Bill {
     }
     .height('100%')
     .width('100%')
-    .onAppear(() => {
-      this.refreshData()
+    .onVisibleAreaChange([0.0, 1.0], (_isVisible: boolean, currentRatio: number) => {
+      if (currentRatio > 0) {
+        this.refreshData()
+      }
     })
   }
 }
