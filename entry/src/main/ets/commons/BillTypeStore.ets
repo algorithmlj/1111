@@ -17,7 +17,7 @@ export class BillTypeStore {
     try {
       const entries: distributedKVStore.Entry[] = await store.getEntries(KEY_PREFIX)
       for (let i = 0; i < entries.length; i++) {
-        const value: string = entries[i].value.value as string
+        const value: string = entries[i].value.value.toString()
         const item: BillTypeModel = JSON.parse(value) as BillTypeModel
         if (item.type === type) {
           results.push(item)
@@ -35,8 +35,8 @@ export class BillTypeStore {
   static async findById(id: string): Promise<BillTypeModel | undefined> {
     const store: distributedKVStore.SingleKVStore = await getKvStore()
     try {
-      const value: distributedKVStore.Value = await store.get(KEY_PREFIX + id)
-      return JSON.parse(value as string) as BillTypeModel
+      const value: string = (await store.get(KEY_PREFIX + id)).toString()
+      return JSON.parse(value) as BillTypeModel
     } catch (_e) {
       return undefined
     }
@@ -51,7 +51,11 @@ export class BillTypeStore {
     const random: string = Math.floor(Math.random() * 10000).toString(36)
     const id: string = `${type}_${now}_${random}`
     const item: BillTypeModel = { id, name, type }
-    await store.put(KEY_PREFIX + id, JSON.stringify(item))
+    try {
+      await store.put(KEY_PREFIX + id, JSON.stringify(item))
+    } catch (_e) {
+      // ignore
+    }
   }
 
   /**

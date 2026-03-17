@@ -29,14 +29,13 @@ export async function getKvStore(): Promise<distributedKVStore.SingleKVStore> {
     throw new Error('KVManager 未初始化，请先调用 initKvManager')
   }
   const options: distributedKVStore.Options = {
-    createIfMissing: true,
-    encrypt: false,
-    backup: false,
-    autoSync: false,
-    kvStoreType: distributedKVStore.KVStoreType.SINGLE_VERSION,
-    securityLevel: distributedKVStore.SecurityLevel.S1
+    securityLevel:distributedKVStore.SecurityLevel.S3
   }
-  kvStore = await kvManager.getKVStore<distributedKVStore.SingleKVStore>(KV_STORE_ID, options)
+  try {
+    kvStore = await kvManager.getKVStore<distributedKVStore.SingleKVStore>(KV_STORE_ID, options)
+  } catch (e) {
+    throw new Error('获取 KVStore 失败: ' + JSON.stringify(e))
+  }
   return kvStore
 }
 
