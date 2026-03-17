@@ -23,3 +23,8 @@ export interface BillListFilter {
   month: string         // yyyy-MM 格式
   type: BillTypeKind | 'all'
 }
+
+export class BillSummary {
+  income: number = 0
+  expense: number = 0
+}

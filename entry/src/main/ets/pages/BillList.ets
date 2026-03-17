@@ -1,5 +1,5 @@
 import { pathStack } from '../commons/SystemConfig'
-import { BillDetailParams, BillEditParams, BillModel } from '../commons/BillModel'
+import { BillDetailParams, BillEditParams, BillModel, BillSummary } from '../commons/BillModel'
 import { BillTypeKind } from '../commons/BillTypeModel'
 import { BillStore } from '../commons/BillStore'
 
@@ -26,7 +26,7 @@ export struct BillList {
 
   private async refreshData(): Promise<void> {
     this.bills = await BillStore.list(this.currentMonth, this.filterType)
-    const summary: Record<string, number> = await BillStore.sumByMonth(this.currentMonth)
+    const summary: BillSummary = await BillStore.sumByMonth(this.currentMonth)
     this.totalIncome = summary.income
     this.totalExpense = summary.expense
   }

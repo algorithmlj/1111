@@ -32,6 +32,7 @@ export struct BillTypeEdit {
 
   private async submit(): Promise<void> {
     const name: string = this.name.trim()
+    console.log(this.mode)
     if (name.length === 0) {
       this.errorText = '请输入账单类型名称'
       return
@@ -120,7 +121,7 @@ export struct BillTypeEdit {
               .fontColor('#333333')
               .width('100%')
 
-            TextInput({ placeholder: '例如：餐饮、房租、工资', text: this.name })
+            TextInput({ placeholder: '例如：餐饮、房租、工资' ,text:this.name})
               .onChange((value: string) => {
                 this.name = value
                 if (value.trim().length > 0) {

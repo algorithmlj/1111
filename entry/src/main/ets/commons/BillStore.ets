@@ -1,5 +1,5 @@
 import { distributedKVStore } from '@kit.ArkData'
-import { BillModel } from './BillModel'
+import { BillModel, BillSummary } from './BillModel'
 import { BillTypeKind } from './BillTypeModel'
 import { getKvStore } from './SystemConfig'
 
@@ -97,10 +97,9 @@ export class BillStore {
   /**
    * 按月统计收入和支出总额
    */
-  static async sumByMonth(month: string): Promise<Record<string, number>> {
+  static async sumByMonth(month: string): Promise<BillSummary> {
     const store: distributedKVStore.SingleKVStore = await getKvStore()
-    let income: number = 0
-    let expense: number = 0
+    const result: BillSummary = new BillSummary()
     try {
       const entries: distributedKVStore.Entry[] = await store.getEntries(KEY_PREFIX)
       for (let i = 0; i < entries.length; i++) {
@@ -110,15 +109,14 @@ export class BillStore {
           continue
         }
         if (item.type === 'income') {
-          income += item.money
+          result.income += item.money
         } else {
-          expense += item.money
+          result.expense += item.money
         }
       }
     } catch (_e) {
       // ignore
     }
-    const result: Record<string, number> = { income: income, expense: expense }
     return result
   }
 }

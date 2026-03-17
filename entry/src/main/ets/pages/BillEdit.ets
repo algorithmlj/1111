@@ -246,7 +246,7 @@ export struct BillEdit {
               .backgroundColor('#f8f8fa')
               .borderRadius(12)
               .onClick(() => {
-                DatePickerDialog.show({
+                this.getUIContext().showDatePickerDialog({
                   selected: new Date(this.ctime),
                   onDateAccept: (value: Date) => {
                     const y: string = value.getFullYear().toString()
