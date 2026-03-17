@@ -16,14 +16,19 @@
       "buildFunction": "BillEditBuilder"
     },
     {
-      "name": "BillList",
-      "pageSourceFile": "src/main/ets/pages/BillList.ets",
-      "buildFunction": "BillListBuilder"
-    },
-    {
       "name": "BillDetail",
       "pageSourceFile": "src/main/ets/pages/BillDetail.ets",
       "buildFunction": "BillDetailBuilder"
+    },
+    {
+      "name": "AssetEdit",
+      "pageSourceFile": "src/main/ets/pages/AssetEdit.ets",
+      "buildFunction": "AssetEditBuilder"
+    },
+    {
+      "name": "AssetDetail",
+      "pageSourceFile": "src/main/ets/pages/AssetDetail.ets",
+      "buildFunction": "AssetDetailBuilder"
     }
   ]
 }

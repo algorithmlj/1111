@@ -64,11 +64,6 @@ export struct Bill {
         // ── 顶部收支总览 + 类型管理入口 ──
         Column({ space: 12 }) {
           Row() {
-            Text('账单')
-              .fontSize(20)
-              .fontWeight(FontWeight.Bold)
-              .fontColor('#333333')
-
             Blank()
 
             // 类型管理入口（小图标按钮）
