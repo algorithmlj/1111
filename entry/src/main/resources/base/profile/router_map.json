@@ -9,6 +9,21 @@
       "name": "BillTypeEdit",
       "pageSourceFile": "src/main/ets/pages/BillTypeEdit.ets",
       "buildFunction": "BillTypeEditBuilder"
+    },
+    {
+      "name": "BillEdit",
+      "pageSourceFile": "src/main/ets/pages/BillEdit.ets",
+      "buildFunction": "BillEditBuilder"
+    },
+    {
+      "name": "BillList",
+      "pageSourceFile": "src/main/ets/pages/BillList.ets",
+      "buildFunction": "BillListBuilder"
+    },
+    {
+      "name": "BillDetail",
+      "pageSourceFile": "src/main/ets/pages/BillDetail.ets",
+      "buildFunction": "BillDetailBuilder"
     }
   ]
 }
