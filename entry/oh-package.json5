@@ -5,6 +5,8 @@
   "main": "",
   "author": "",
   "license": "",
-  "dependencies": {}
+  "dependencies": {
+    "@ibestservices/ucharts": "^1.1.0"
+  }
 }
 

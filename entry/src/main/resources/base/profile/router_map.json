@@ -29,6 +29,21 @@
       "name": "AssetDetail",
       "pageSourceFile": "src/main/ets/pages/AssetDetail.ets",
       "buildFunction": "AssetDetailBuilder"
+    },
+    {
+      "name": "BillStat",
+      "pageSourceFile": "src/main/ets/pages/BillStat.ets",
+      "buildFunction": "BillStatBuilder"
+    },
+    {
+      "name": "BillTypeStat",
+      "pageSourceFile": "src/main/ets/pages/BillTypeStat.ets",
+      "buildFunction": "BillTypeStatBuilder"
+    },
+    {
+      "name": "AssetStat",
+      "pageSourceFile": "src/main/ets/pages/AssetStat.ets",
+      "buildFunction": "AssetStatBuilder"
     }
   ]
 }

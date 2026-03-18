@@ -48,7 +48,7 @@ struct Index {
             Assets()
           }.tabBar(this.createBar(3))
           TabContent(){
-            Statistic()
+            Statistic({ currentTabIndex: this.index })
           }.tabBar(this.createBar(4))
         }
         .barPosition(BarPosition.End)
