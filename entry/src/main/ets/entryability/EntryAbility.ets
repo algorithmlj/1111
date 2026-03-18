@@ -1,7 +1,7 @@
 import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import { initKvManager } from '../commons/SystemConfig';
+import { ArkDataUtil } from '../utils/ArkDataUtil';
 
 const DOMAIN = 0x0000;
 
@@ -14,7 +14,7 @@ export default class EntryAbility extends UIAbility {
     }
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onCreate');
     // 初始化键值型数据库
-    initKvManager(this.context);
+    ArkDataUtil.init(this.context);
   }
 
   onDestroy(): void {

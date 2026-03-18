@@ -1,6 +1,6 @@
 import { pathStack } from '../commons/SystemConfig'
-import { AssetDetailParams, AssetEditParams, AssetModel, getAssetColor } from '../commons/AssetModel'
-import { AssetStore } from '../commons/AssetStore'
+import { AssetDetailParams, AssetEditParams, AssetModel, getAssetColor } from '../models/AssetModel'
+import { AssetStore } from '../viewmodels/AssetStore'
 
 @Builder
 export function AssetDetailBuilder(name: string) {

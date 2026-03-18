@@ -1,6 +1,6 @@
 import { pathStack } from '../commons/SystemConfig'
-import { BillDetailParams, BillEditParams, BillModel } from '../commons/BillModel'
-import { BillStore } from '../commons/BillStore'
+import { BillDetailParams, BillEditParams, BillModel } from '../models/BillModel'
+import { BillStore } from '../viewmodels/BillStore'
 
 @Builder
 export function BillDetailBuilder(name: string) {

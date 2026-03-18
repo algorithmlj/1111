@@ -1,8 +1,8 @@
 import { pathStack } from '../commons/SystemConfig'
-import { BillEditParams, BillModel } from '../commons/BillModel'
-import { BillTypeKind, BillTypeModel } from '../commons/BillTypeModel'
-import { BillTypeStore } from '../commons/BillTypeStore'
-import { BillStore } from '../commons/BillStore'
+import { BillEditParams, BillModel } from '../models/BillModel'
+import { BillTypeKind, BillTypeModel } from '../models/BillTypeModel'
+import { BillTypeStore } from '../viewmodels/BillTypeStore'
+import { BillStore } from '../viewmodels/BillStore'
 
 @Builder
 export function BillEditBuilder(name: string) {

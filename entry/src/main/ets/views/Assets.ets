@@ -5,8 +5,8 @@ import {
   AssetModel,
   AssetSummary,
   getAssetColor
-} from '../commons/AssetModel'
-import { AssetStore } from '../commons/AssetStore'
+} from '../models/AssetModel'
+import { AssetStore } from '../viewmodels/AssetStore'
 
 @Component
 export struct Assets {

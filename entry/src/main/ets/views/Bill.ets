@@ -1,7 +1,7 @@
 import { pathStack } from '../commons/SystemConfig'
-import { BillDetailParams, BillEditParams, BillModel, BillSummary } from '../commons/BillModel'
-import { BillTypeKind } from '../commons/BillTypeModel'
-import { BillStore } from '../commons/BillStore'
+import { BillDetailParams, BillEditParams, BillModel, BillSummary } from '../models/BillModel'
+import { BillTypeKind } from '../models/BillTypeModel'
+import { BillStore } from '../viewmodels/BillStore'
 
 @Component
 export struct Bill {

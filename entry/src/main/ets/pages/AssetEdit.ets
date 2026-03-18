@@ -6,8 +6,8 @@ import {
   ASSET_TYPE_LIST,
   getAssetColor,
   getAssetIcon
-} from '../commons/AssetModel'
-import { AssetStore } from '../commons/AssetStore'
+} from '../models/AssetModel'
+import { AssetStore } from '../viewmodels/AssetStore'
 
 @Builder
 export function AssetEditBuilder(name: string) {
