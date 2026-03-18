@@ -1,4 +1,4 @@
-import { BarModel } from '../commons/BarModel'
+import { BarModel } from '../models/BarModel'
 import { pathStack, SystemConfig } from '../commons/SystemConfig'
 import { AIManager } from '../views/AIManager'
 import { Assets } from '../views/Assets'

@@ -1,4 +1,4 @@
-import { BarModel } from './BarModel'
+import { BarModel } from '../models/BarModel'
 
 export const pathStack: NavPathStack = new NavPathStack()
 
