@@ -74,6 +74,37 @@ export class BillStore {
   }
 
   /**
+   * 查询近N天的账单（默认30天）
+   */
+  static async listRecentDays(days: number = 30): Promise<BillModel[]> {
+    const entries: string[] = await ArkDataUtil.getEntriesByPrefix(KEY_PREFIX)
+    const now = new Date()
+    const startTime = now.getTime() - days * 24 * 60 * 60 * 1000
+    const results: BillModel[] = []
+    for (let i = 0; i < entries.length; i++) {
+      const item: BillModel = JSON.parse(entries[i]) as BillModel
+      // ctime 格式为 yyyy-MM-dd，解析为时间戳比较
+      const parts = item.ctime.split('-')
+      if (parts.length === 3) {
+        const itemDate = new Date(Number.parseInt(parts[0]), Number.parseInt(parts[1]) - 1, Number.parseInt(parts[2]))
+        if (itemDate.getTime() >= startTime) {
+          results.push(item)
+        }
+      }
+    }
+    // 按日期倒序
+    results.sort((a: BillModel, b: BillModel): number => {
+      if (a.ctime > b.ctime) {
+        return -1
+      } else if (a.ctime < b.ctime) {
+        return 1
+      }
+      return 0
+    })
+    return results
+  }
+
+  /**
    * 按月统计收入和支出总额
    */
   static async sumByMonth(month: string): Promise<BillSummary> {

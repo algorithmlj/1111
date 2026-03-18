@@ -1,4 +1,6 @@
 import { ChatMessage } from '../models/ChatModel'
+import { BillModel } from '../models/BillModel'
+import { BillStore } from '../viewmodels/BillStore'
 import { DashScopeUtil } from '../utils/DashScopeUtil'
 
 /**
@@ -22,6 +24,8 @@ export struct AIManager {
   private scroller: Scroller = new Scroller()
   // 历史消息（用于发送给API）
   private chatHistory: ChatMessage[] = []
+  // 近一个月账单摘要文本（注入到系统提示词）
+  private billSummary: string = ''
 
   aboutToAppear(): void {
     // 添加欢迎消息
@@ -30,6 +34,77 @@ export struct AIManager {
       content: '你好！我是你的AI智能管家，可以帮你解答财务管理、日常生活等方面的问题。请问有什么可以帮你的吗？',
       isLoading: false
     })
+    // 加载近一个月账单数据
+    this.loadRecentBills()
+  }
+
+  /**
+   * 加载近一个月的账单记录，并生成摘要文本
+   */
+  async loadRecentBills(): Promise<void> {
+    try {
+      const bills: BillModel[] = await BillStore.listRecentDays(30)
+      if (bills.length === 0) {
+        this.billSummary = ''
+        return
+      }
+
+      // 统计汇总
+      let totalIncome: number = 0
+      let totalExpense: number = 0
+      const expenseByCategory: Map<string, number> = new Map()
+      const incomeByCategory: Map<string, number> = new Map()
+
+      for (const bill of bills) {
+        if (bill.type === 'income') {
+          totalIncome += bill.money
+          const prev = incomeByCategory.get(bill.tname) ?? 0
+          incomeByCategory.set(bill.tname, prev + bill.money)
+        } else {
+          totalExpense += bill.money
+          const prev = expenseByCategory.get(bill.tname) ?? 0
+          expenseByCategory.set(bill.tname, prev + bill.money)
+        }
+      }
+
+      // 构建摘要文本
+      let summary: string = `【用户近30天账单摘要】\n`
+      summary += `账单笔数：${bills.length}笔\n`
+      summary += `总收入：${totalIncome.toFixed(2)}元\n`
+      summary += `总支出：${totalExpense.toFixed(2)}元\n`
+      summary += `净收入：${(totalIncome - totalExpense).toFixed(2)}元\n`
+
+      // 支出分类明细
+      if (expenseByCategory.size > 0) {
+        summary += `\n【支出分类】\n`
+        expenseByCategory.forEach((amount: number, category: string) => {
+          summary += `- ${category}：${amount.toFixed(2)}元\n`
+        })
+      }
+
+      // 收入分类明细
+      if (incomeByCategory.size > 0) {
+        summary += `\n【收入分类】\n`
+        incomeByCategory.forEach((amount: number, category: string) => {
+          summary += `- ${category}：${amount.toFixed(2)}元\n`
+        })
+      }
+
+      // 最近账单明细（最多列出最近20条，避免 token 过多）
+      const detailCount = Math.min(bills.length, 20)
+      summary += `\n【最近${detailCount}条账单明细】\n`
+      for (let i = 0; i < detailCount; i++) {
+        const b = bills[i]
+        const typeLabel = b.type === 'income' ? '收入' : '支出'
+        const info = b.info.length > 0 ? `（${b.info}）` : ''
+        summary += `- ${b.ctime} [${typeLabel}] ${b.tname}: ${b.money.toFixed(2)}元${info}\n`
+      }
+
+      this.billSummary = summary
+    } catch (e) {
+      console.error(`加载账单数据失败: ${JSON.stringify(e)}`)
+      this.billSummary = ''
+    }
   }
 
   /**
@@ -104,7 +179,9 @@ export struct AIManager {
         }
         this.messageList = [...this.messageList]
         this.isRequesting = false
-      }
+      },
+      // 传入账单摘要
+      this.billSummary
     )
   }
 
@@ -127,6 +204,8 @@ export struct AIManager {
       content: '对话已清空。有什么可以帮你的吗？',
       isLoading: false
     }]
+    // 重新加载最新账单数据
+    this.loadRecentBills()
   }
 
   build() {
