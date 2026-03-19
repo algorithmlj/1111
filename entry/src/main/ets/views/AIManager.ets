@@ -143,6 +143,7 @@ export struct AIManager {
 
     // 5. 发起流式请求
     const aiMsgIndex = this.messageList.length - 1
+    //创建数组浅拷贝的简洁写法，确保传递给 API 的是那一刻的快照，而非可能被后续修改的原数组引用
     const historySnapshot: ChatMessage[] = [...this.chatHistory]
 
     DashScopeUtil.requestStream(
