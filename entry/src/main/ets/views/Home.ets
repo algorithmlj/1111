@@ -5,6 +5,8 @@ import { HealthStatus, Insight, HomeStore } from '../viewmodels/HomeStore'
 
 @Component
 export struct Home {
+  // 父组件传入的当前 Tab 索引，用于监听切换
+  @Prop @Watch('onTabChanged') currentTabIndex: number = 0
   @State private currentMonth: string = ''
   @State private income: number = 0
   @State private expense: number = 0
@@ -16,6 +18,15 @@ export struct Home {
 
   aboutToAppear(): void {
     this.loadData()
+  }
+
+  /**
+   * Tab 切换时触发，当切换到首页 Tab（index=0）时刷新数据
+   */
+  onTabChanged(): void {
+    if (this.currentTabIndex === 0) {
+      this.loadData()
+    }
   }
 
   async loadData(): Promise<void> {

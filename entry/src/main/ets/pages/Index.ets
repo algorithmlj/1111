@@ -36,7 +36,7 @@ struct Index {
       Column({space:10}) {
         Tabs(){
           TabContent(){
-            Home()
+            Home({ currentTabIndex: this.index })
           }.tabBar(this.createBar(0))
           TabContent(){
             Bill()
