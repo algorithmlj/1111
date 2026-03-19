@@ -137,7 +137,8 @@ export struct AssetEdit {
                 .width('100%')
 
               TextInput({ placeholder: '请输入金额（负数表示负债）', text: this.money })
-                .type(InputType.Number)
+                .type(InputType.Normal)
+                .inputFilter('[0-9.\\-]')
                 .onChange((value: string) => {
                   this.money = value
                   this.errorText = ''

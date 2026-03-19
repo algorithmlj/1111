@@ -209,7 +209,8 @@ export struct BillEdit {
                 .width('100%')
 
               TextInput({ placeholder: '请输入金额', text: this.money })
-                .type(InputType.Number)
+                .type(InputType.Normal)
+                .inputFilter('[0-9.\\-]')
                 .onChange((value: string) => {
                   this.money = value
                   this.errorText = ''
