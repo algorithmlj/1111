@@ -14,6 +14,9 @@ export function AssetEditBuilder(name: string) {
   AssetEdit()
 }
 
+
+
+
 @Component
 export struct AssetEdit {
   @State private mode: 'create' | 'edit' = 'create'
