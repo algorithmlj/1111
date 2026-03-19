@@ -62,15 +62,15 @@ export class HomeStore {
 
   static async evaluateHealthStatus(): Promise<HealthStatus> {
     const now: Date = new Date()
-    const currentMonth: string = await this.getCurrentMonth()
-    const summary: BillSummary = await this.getMonthSummary(currentMonth)
+    const currentMonth: string = await HomeStore.getCurrentMonth()
+    const summary: BillSummary = await HomeStore.getMonthSummary(currentMonth)
 
     if (summary.expense > summary.income && summary.income > 0) {
       return HealthStatus.WARNING
     }
 
-    const thisWeekExpense: number = await this.getWeekExpense(now)
-    const lastWeekExpense: number = await this.getWeekExpense(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000))
+    const thisWeekExpense: number = await HomeStore.getWeekExpense(now)
+    const lastWeekExpense: number = await HomeStore.getWeekExpense(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000))
 
     if (lastWeekExpense > 0 && thisWeekExpense > lastWeekExpense * 1.5) {
       return HealthStatus.ATTENTION
@@ -102,10 +102,9 @@ export class HomeStore {
   }
 
   static async generateInsight(): Promise<Insight | null> {
-    const now: Date = new Date()
-    const currentMonth: string = await this.getCurrentMonth()
-    const summary: BillSummary = await this.getMonthSummary(currentMonth)
-    const recentBills: BillModel[] = await this.getRecentBills(7)
+    const currentMonth: string = await HomeStore.getCurrentMonth()
+    const summary: BillSummary = await HomeStore.getMonthSummary(currentMonth)
+    const recentBills: BillModel[] = await HomeStore.getRecentBills(7)
 
     if (summary.income > 0 && summary.expense > summary.income) {
       return {
